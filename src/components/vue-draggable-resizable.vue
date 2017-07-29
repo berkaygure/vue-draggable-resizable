@@ -97,6 +97,8 @@
       this.parentW = 9999
       this.parentY = 0
       this.parentH = 9999
+      this.parentOffX = 0
+      this.parentOffY = 0
 
       this.mouseX = 0
       this.mouseY = 0
@@ -124,10 +126,12 @@
 
       if (this.parent) {
         const style = window.getComputedStyle(this.$el.parentNode, null)
-
         const parentW = parseInt(style.getPropertyValue('width'), 10)
         const parentH = parseInt(style.getPropertyValue('height'), 10)
-
+        const parentOffX = this.$el.parentNode.offsetLeft
+        const parentOffY = this.$el.parentNode.offsetTop
+        this.parentOffX = parentOffX
+        this.parentOffY = parentOffY
         this.parentW = parentW
         this.parentH = parentH
 
@@ -278,7 +282,7 @@
           if (this.handle === 'rot') {
             this.active = true
             this.opacity = 0.6
-            let radians = Math.atan2(this.mouseX - (this.elmX + (this.elmW / 2)), this.mouseY - (this.elmY + (this.elmH / 2)))
+            let radians = Math.atan2(this.mouseX - (this.elmX + (this.elmW / 2) + this.parentOffX), this.mouseY - (this.elmY + (this.elmH / 2) + this.parentOffY))
             let degree = (radians * (180 / Math.PI) * -1)
             this.degree = Math.floor((degree + 360) % 360)
           } else {
@@ -376,6 +380,7 @@
         position: absolute;
         box-sizing: border-box;
     }
+
 
     .draggable:hover {
         cursor: move;
